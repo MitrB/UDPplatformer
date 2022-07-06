@@ -101,4 +101,7 @@ dist
 .dynamodb/
 
 # TernJS port file
+
+# README BACKUP
+README.md.backup
 .tern-port
