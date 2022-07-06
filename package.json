@@ -2,13 +2,13 @@
   "name": "browserserver",
   "version": "1.0.0",
   "description": "Browser server skeleton for making in-browser apps",
-  "main": ".dist/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "lint": "eslint . --ext .ts",
-    "start": "node ./dist/index.js"
+    "start": "node ."
   },
   "repository": {
     "type": "git",
@@ -34,9 +34,13 @@
   },
   "homepage": "https://github.com/MitrB/BrowserServer#readme",
   "dependencies": {
-    "typescript": "^4.7.4"
+    "express": "^4.18.1",
+    "typescript": "^4.7.4",
+    "ws": "^8.8.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0"
