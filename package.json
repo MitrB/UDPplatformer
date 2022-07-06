@@ -1,0 +1,44 @@
+{
+  "name": "browserserver",
+  "version": "1.0.0",
+  "description": "Browser server skeleton for making in-browser apps",
+  "main": ".dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "lint": "eslint . --ext .ts",
+    "start": "node ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MitrB/BrowserServer.git"
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "browser",
+    "server",
+    "game",
+    "application",
+    "js",
+    "ts",
+    "node"
+  ],
+  "author": "Anass Hamdi, Corneel Van Moll, Dmitry Buggenhout",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MitrB/BrowserServer/issues"
+  },
+  "homepage": "https://github.com/MitrB/BrowserServer#readme",
+  "dependencies": {
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.19.0"
+  }
+}
