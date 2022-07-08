@@ -21,7 +21,7 @@ class Server {
     this.io = geckos();
     this.port = 3000;
 
-    this.app.use("/", express.static(path.join(__dirname, "../client")));
+    this.app.use("/", express.static(path.join(__dirname, "../app")));
 
     this.app.get("/", (req, res) => {
       res.sendFile(path.join(__dirname, "../index.html"));
