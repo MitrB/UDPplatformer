@@ -5,7 +5,7 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
-// command: $NODE_DEBUG=server npm start
+// command: NODE_DEBUG='server' npm start
 // to see debug messages
 import util from "util";
 let debug = util.debuglog("server");
@@ -21,7 +21,7 @@ class Server {
     this.io = geckos();
     this.port = 3000;
 
-    this.app.use("/", express.static(path.join(__dirname, "../app")));
+    this.app.use("/", express.static(path.join(__dirname, "../client")));
 
     this.app.get("/", (req, res) => {
       res.sendFile(path.join(__dirname, "../index.html"));

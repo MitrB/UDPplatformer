@@ -7,6 +7,7 @@ export default class App {
             height: 100,
             backgroundColor: 0x1099b
         });
-        document.getElementById("game").appendChild(app.view);
+        console.log("We get here");
+        document.getElementById("game").appendChild(this.app.view);
     }
 }
