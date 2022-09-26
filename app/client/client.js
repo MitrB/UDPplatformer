@@ -6,6 +6,7 @@ import App from "../index.js";
 
 class Client {
   constructor() {
+    
     this.channel = geckos({ port: 3000 }); // default port is 9208
 
     this.channel.onConnect((error) => {
@@ -18,11 +19,19 @@ class Client {
         console.log(`You got the message ${data}`);
       });
 
-      this.channel.emit("chat message", "a short message sent to the server");
+      this.channel.emit("chat message", "a short message to the server");
     });
+
+    const app = new App(this);
+  }
+
+  updatePlayerState(State) {
+    this.channel.emit("chat message", "State change");
   }
 }
 
+
+
 const client = new Client();
-const app = new App();
+
 

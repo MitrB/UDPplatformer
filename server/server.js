@@ -45,7 +45,7 @@ class Server {
       debug(`Listening on http://localhost:${this.port}`);
     });
 
-    this.Test();
+    // this.Test();
   }
 
   Ping() {
