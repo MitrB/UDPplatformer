@@ -5,6 +5,8 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
+import World from "./Game/world.js";
+
 // command: NODE_DEBUG='server' npm start
 // to see debug messages
 import util from "util";
@@ -15,6 +17,13 @@ const __dirname = dirname(__filename);
 
 class Server {
   constructor() {
+    this.InitServer();
+    this.InitWorld();
+
+    // this.Test();
+  }
+
+  InitServer(){
     debug("Initializing Server");
     this.app = express();
     this.server = http.createServer(this.app);
@@ -44,8 +53,14 @@ class Server {
     this.server.listen(this.port, () => {
       debug(`Listening on http://localhost:${this.port}`);
     });
+  }
 
-    // this.Test();
+  InitWorld(){
+    this.World = new World(this);
+  }
+
+  updatePlayerPositions(positions){
+    this.io.emit("position update", positions);
   }
 
   Ping() {
@@ -60,6 +75,7 @@ class Server {
       this.io.emit("chat message", messageNumber);
     }, 1000);
   }
+  
 }
 
 const server = new Server();

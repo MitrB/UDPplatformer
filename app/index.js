@@ -3,6 +3,8 @@ import { Application } from "pixi.js";
 export default class App {
     constructor(client) {
         this.client = client;
+        this.players = new Map();
+        
         this.state = new State();
         this.app = new Application({
             width: 100, 
@@ -60,6 +62,7 @@ export default class App {
     updateControls() {
         this.client.updatePlayerState(this.State);
     }
+
 }
 
 class State {
