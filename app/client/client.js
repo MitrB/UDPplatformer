@@ -33,6 +33,7 @@ class Client {
     this.channel.emit("state update", State);
   }
 
+  // TODO: ask the server to create a player 
   askForPlayerCreation() {
     this.channel.emit("create player", "");
   }

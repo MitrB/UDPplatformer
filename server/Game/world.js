@@ -10,6 +10,7 @@ export default class World {
     }
 
     // Managing player objects
+    // TODO: Notify the client that a player has been created in the world. Send ID and starting position
     createPlayer() {
         this.idCounter += 1;
         let player = new Player(this.idCounter);
