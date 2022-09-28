@@ -1,12 +1,15 @@
 import Player from "./player.js";
 
 export default class World {
-    constructor(Server){
+    constructor(Server) {
         this.idCounter = -1;
         this.server = Server;
         this.players = new Map();
+        this.running = true;
+        this.updateLoop();
     }
 
+    // Managing player objects
     createPlayer() {
         this.idCounter += 1;
         let player = new Player(this.idCounter);
@@ -18,12 +21,23 @@ export default class World {
     }
 
     updatePlayerState(id, State) {
-        let player = this.players.get(id);
-        player.updateState(State);
+        this.players.get(id).updateState(State);
     }
 
-    updatePlayerPositions(){
-        this.server.updatePlayerPositions(positions);
+    // Sending player position update for one id to the client 
+    updatePlayerPositions(value, key) {
+        let positionUpdate = {"playerID": key, "positionX": value.state.xPosition, "positionY": value.state.yPosition}
+        this.server.updatePlayerPositions(positionUpdate);
     }
-    
+
+    updateLoop() {
+        if ((this.running = true)) {
+            setTimeout(() => { 
+                this.players.forEach((value, key) => {
+                    this.updatePlayerPositions(value, key);
+                });
+                this.updateLoop();
+            }, 50);
+        }
+    }
 }

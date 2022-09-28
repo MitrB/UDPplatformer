@@ -10,18 +10,19 @@ export default class Player {
     }
 
     updateState(state) {
-        if (state.left = true) {
-            this.xPosition -= 10;
+        if (state.left == true) {
+            this.state.xPosition -= 10;
         }
-        if (state.right = true) {
-            this.xPosition += 10;
+        if (state.right == true) {
+            this.state.xPosition += 10;
         }
-        if (state.up = true) {
-            this.yPosition -= 10;
+        if (state.up == true) {
+            this.state.yPosition -= 10;
         }
-        if (state.down = true) {
-            this.yPosition += 10;
+        if (state.down == true) {
+            this.state.yPosition += 10;
         }
+        console.log(this.xPosition);
     }
 }
 

@@ -10,6 +10,7 @@ import World from "./Game/world.js";
 // command: NODE_DEBUG='server' npm start
 // to see debug messages
 import util from "util";
+
 let debug = util.debuglog("server");
 
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,10 @@ class Server {
         // emit the "chat message" data to all channels in the same room
         this.io.room(channel.roomId).emit("chat message", data);
       });
+      channel.on("state update", (data) => {
+        debug(`got ${data} from "chat message"`);
+        this.updatePlayerState(data);
+      })
     });
     // make sure the client uses the same port
     // @geckos.io/client uses the port 9208 by default
@@ -61,6 +66,13 @@ class Server {
 
   updatePlayerPositions(positions){
     this.io.emit("position update", positions);
+  }
+
+  updatePlayerState(State) {
+    if (this.World.players.get(0) == undefined) {
+      this.World.createPlayer();
+    }
+    this.World.updatePlayerState(0, State);
   }
 
   Ping() {

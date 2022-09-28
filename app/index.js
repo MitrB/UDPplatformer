@@ -1,5 +1,5 @@
 import { Application } from "pixi.js";
-
+import * as PIXI from "pixi.js";
 export default class App {
     constructor(client) {
         this.client = client;
@@ -7,11 +7,15 @@ export default class App {
         
         this.state = new State();
         this.app = new Application({
-            width: 100, 
-            height: 100,
+            width: 1000, 
+            height: 1000,
             backgroundColor: 0x1099b
         });
+
         document.getElementById("game").appendChild(this.app.view);
+
+        this.playerGraphics = new PIXI.Graphics();
+        this.createPlayer(10, 10);
 
         document.addEventListener('keydown', (event) => {
             const keyName = event.key;
@@ -59,8 +63,22 @@ export default class App {
           
     }
 
+    createPlayer(x, y) {
+        this.playerGraphics.clear();
+        this.playerGraphics.lineStyle(5, 0xFF0000);
+        this.playerGraphics.drawRect(x, y, 10, 10);
+        this.app.stage.addChild(this.playerGraphics);
+    }
+
+    updatePlayerPosition(update) {
+        let x = update.positionX;
+        let y = update.positionY;
+        this.createPlayer(x, y);
+    }
+
     updateControls() {
-        this.client.updatePlayerState(this.State);
+        let stateMessage = {"left": this.state.left, "right": this.state.right, "up": this.state.up, "down": this.state.down};
+        this.client.updatePlayerState(stateMessage);
     }
 
 }
