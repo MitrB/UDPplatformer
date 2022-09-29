@@ -1,6 +1,10 @@
 import Player from "./player.js";
-
 export default class World {
+    /**
+     * Game world state.
+     * Player management.
+     * @param {Server} Server For communicating and receiving position/state updates.
+     */
     constructor(Server) {
         this.idCounter = -1;
         this.server = Server;

@@ -10,13 +10,18 @@ import World from "./Game/world.js";
 // command: NODE_DEBUG='server' npm start
 // to see debug messages
 import util from "util";
-
 let debug = util.debuglog("server");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 class Server {
+  /**
+   * Server side communication.
+   * Initializes express {http} server. 
+   * Initializes udp connection with geckos.
+   * Initializes game world.
+   */
   constructor() {
     this.InitServer();
     this.InitWorld();
@@ -24,9 +29,11 @@ class Server {
     // this.Test();
   }
 
+  // After function end, server ready to be connected to.
   InitServer(){
     debug("Initializing Server");
     this.app = express();
+    // TODO: convert to https server.
     this.server = http.createServer(this.app);
     this.io = geckos();
     this.port = 3000;
@@ -60,6 +67,7 @@ class Server {
     });
   }
 
+  // Initializes the game world.
   InitWorld(){
     this.World = new World(this);
   }
@@ -75,6 +83,8 @@ class Server {
     this.World.updatePlayerState(0, State);
   }
 
+
+  // Functions for test purposes.
   Ping() {
     debug("Sending ping");
     this.io.emit("ping", "ping");

@@ -5,6 +5,9 @@ import App from "../game/application.js";
 // https://github.com/geckosio/geckos.io/tree/master/bundles
 
 export default class Client {
+  /**
+   *  Client side communication.
+   */
   constructor() {
     this.app = new App(this);
     this.connect().then(() => {

@@ -2,6 +2,11 @@ import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
 
 export default class App {
+    /**
+     * Pixi js application. 
+     * Manages the game canvas and drawing of the graphics.
+     * @param {Client} client 
+     */
     constructor(client) {
         this.client = client;
         this.players = new Map();

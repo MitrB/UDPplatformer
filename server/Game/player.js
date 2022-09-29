@@ -1,4 +1,9 @@
 export default class Player {
+    /**
+     * Physical player object
+     * Acts on the world and the world acts on it.
+     * @param {number} id  unique identifier
+     */
     constructor(id){
         this.id = id;
         this.state = new State();
