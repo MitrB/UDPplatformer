@@ -14,12 +14,13 @@ export default class Client {
     this.world = new World(); // Create world for graphics
 
     this.connect().then(() => {
+      console.log("trying to connect");
       this.configureChannel();
     });
   }
 
   async connect(){
-    this.channel = geckos({ port: 3000 }); // default port is 9208
+    this.channel = geckos({ port: 3000, iceServers: geckos.iceServers }); // default port is 9208
   }
 
   configureChannel() {

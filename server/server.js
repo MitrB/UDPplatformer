@@ -4,6 +4,7 @@ import express from "express";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { iceServers } from "@geckos.io/server";
 
 import World from "./Game/world.js";
 
@@ -36,7 +37,8 @@ class Server {
     this.app = express();
     // TODO: convert to https server.
     this.server = http.createServer(this.app);
-    this.io = geckos();
+    // this.io = geckos();
+    this.io = geckos({iceServers: iceServers});
     this.port = 3000;
 
     this.app.use("/", express.static(path.join(__dirname, "../client")));
@@ -47,6 +49,7 @@ class Server {
 
     this.io.addServer(this.server);
     this.io.onConnection((channel) => {
+      debug(`${channel.id} got connected`);
       // Add the channel to the Map of connections
       this.connections.set(channel.id, channel);
       channel.onDisconnect(() => {
