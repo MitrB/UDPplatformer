@@ -1,14 +1,24 @@
 import geckos from "@geckos.io/client";
-import App from "../index.js";
+import App from "../game/application.js";
 
 // or add a minified version to your index.html file
 // https://github.com/geckosio/geckos.io/tree/master/bundles
 
-class Client {
+export default class Client {
   constructor() {
     this.app = new App(this);
-    this.channel = geckos({ port: 3000 }); // default port is 9208
+    this.connect().then(() => {
+      this.configureChannel();
+    });
 
+
+  }
+
+  async connect(){
+    this.channel = geckos({ port: 3000 }); // default port is 9208
+  }
+
+  configureChannel() {
     this.channel.onConnect((error) => {
       if (error) {
         console.error(error.message);
@@ -19,25 +29,22 @@ class Client {
         console.log(`You got the message ${data}`);
       });
 
-      this.channel.on("position update", (positionUpdate) => { 
+      this.channel.on("position update", (positionUpdate) => {
         console.log("position update");
         this.app.updatePlayerPosition(positionUpdate);
       });
 
       this.channel.emit("chat message", "a short message to the server");
+      this.id = this.channel.id
     });
-
   }
 
   updatePlayerState(State) {
     this.channel.emit("state update", State);
   }
 
-  // TODO: ask the server to create a player 
+  // TODO: ask the server to create a player
   askForPlayerCreation() {
     this.channel.emit("create player", "");
   }
-  
 }
-
-const client = new Client();
