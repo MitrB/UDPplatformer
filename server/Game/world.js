@@ -6,7 +6,6 @@ export default class World {
      * @param {Server} Server For communicating and receiving position/state updates.
      */
     constructor(Server) {
-        this.idCounter = -1;
         this.server = Server;
         this.players = new Map();
         this.running = true;
@@ -15,10 +14,9 @@ export default class World {
 
     // Managing player objects
     // TODO: Notify the client that a player has been created in the world. Send ID and starting position
-    createPlayer() {
-        this.idCounter += 1;
-        let player = new Player(this.idCounter);
-        this.players.set(player.id, player);
+    createPlayer(id) {
+        let player = new Player(id);
+        this.players.set(id, player);
     }
 
     deletePlayer(id) {
@@ -31,7 +29,7 @@ export default class World {
 
     // Sending player position update for one id to the client 
     updatePlayerPositions(value, key) {
-        let positionUpdate = {"playerID": key, "positionX": value.state.xPosition, "positionY": value.state.yPosition}
+        let positionUpdate = {"id": key, "x": value.state.xPosition, "y": value.state.yPosition}
         this.server.updatePlayerPositions(positionUpdate);
     }
 

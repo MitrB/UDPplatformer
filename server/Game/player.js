@@ -27,7 +27,6 @@ export default class Player {
         if (state.down == true) {
             this.state.yPosition += 10;
         }
-        console.log(this.xPosition);
     }
 }
 

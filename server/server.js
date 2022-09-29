@@ -18,11 +18,12 @@ const __dirname = dirname(__filename);
 class Server {
   /**
    * Server side communication.
-   * Initializes express {http} server. 
+   * Initializes express {http} server.
    * Initializes udp connection with geckos.
    * Initializes game world.
    */
   constructor() {
+    this.connections = new Map();
     this.InitServer();
     this.InitWorld();
 
@@ -30,7 +31,7 @@ class Server {
   }
 
   // After function end, server ready to be connected to.
-  InitServer(){
+  InitServer() {
     debug("Initializing Server");
     this.app = express();
     // TODO: convert to https server.
@@ -46,19 +47,28 @@ class Server {
 
     this.io.addServer(this.server);
     this.io.onConnection((channel) => {
+      // Add the channel to the Map of connections
+      this.connections.set(channel.id, channel);
       channel.onDisconnect(() => {
         debug(`${channel.id} got disconnected`);
+        // Make sure that the channel gets removed from the connections Map
+        this.connections.delete(channel.id);
+        this.World.deletePlayer(channel.id);
       });
 
       channel.on("chat message", (data) => {
-        debug(`got ${data} from "chat message"`);
+        debug(`got ${data} from ${channel.id}`);
         // emit the "chat message" data to all channels in the same room
         this.io.room(channel.roomId).emit("chat message", data);
       });
       channel.on("state update", (data) => {
-        debug(`got ${data} from "chat message"`);
-        this.updatePlayerState(data);
-      })
+        debug(`got ${data} from ${channel.id}`);
+        this.updatePlayerState(channel.id, data);
+      });
+      channel.on("create player", (data) => {
+        // create player
+        this.createPlayer(channel.id);
+      });
     });
     // make sure the client uses the same port
     // @geckos.io/client uses the port 9208 by default
@@ -68,21 +78,24 @@ class Server {
   }
 
   // Initializes the game world.
-  InitWorld(){
+  InitWorld() {
     this.World = new World(this);
   }
 
-  updatePlayerPositions(positions){
-    this.io.emit("position update", positions);
+  createPlayer(id) {
+    this.World.createPlayer(id);
   }
 
-  updatePlayerState(State) {
-    if (this.World.players.get(0) == undefined) {
-      this.World.createPlayer();
+  updatePlayerPositions(update) {
+    this.io.emit("position update", update);
+  }
+
+  updatePlayerState(id, State) {
+    if (this.World.players.get(id) == undefined) {
+      this.World.createPlayer(id);
     }
-    this.World.updatePlayerState(0, State);
+    this.World.updatePlayerState(id, State);
   }
-
 
   // Functions for test purposes.
   Ping() {
@@ -97,7 +110,6 @@ class Server {
       this.io.emit("chat message", messageNumber);
     }, 1000);
   }
-  
 }
 
 const server = new Server();

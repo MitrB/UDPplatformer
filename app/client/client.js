@@ -1,5 +1,6 @@
 import geckos from "@geckos.io/client";
 import App from "../game/application.js";
+import World from "../game/gameWorld.js";
 
 // or add a minified version to your index.html file
 // https://github.com/geckosio/geckos.io/tree/master/bundles
@@ -10,11 +11,11 @@ export default class Client {
    */
   constructor() {
     this.app = new App(this);
+    this.world = new World(); // Create world for graphics
+
     this.connect().then(() => {
       this.configureChannel();
     });
-
-
   }
 
   async connect(){
@@ -32,22 +33,29 @@ export default class Client {
         console.log(`You got the message ${data}`);
       });
 
-      this.channel.on("position update", (positionUpdate) => {
+      this.channel.on("position update", (update) => {
         console.log("position update");
-        this.app.updatePlayerPosition(positionUpdate);
+        this.world.updatePlayerPosition(update);
       });
 
-      this.channel.emit("chat message", "a short message to the server");
       this.id = this.channel.id
     });
   }
 
   updatePlayerState(State) {
-    this.channel.emit("state update", State);
+    this.sendUnreliableMessage("state update", State);
   }
 
-  // TODO: ask the server to create a player
   askForPlayerCreation() {
-    this.channel.emit("create player", "");
+    this.sendReliableMessage("create player", "");
+  }
+
+
+  sendReliableMessage(messageType, payload){
+    this.channel.emit(messageType, payload, {reliable: true});
+  }
+
+  sendUnreliableMessage(messageType, payload){
+    this.channel.emit(messageType, payload);
   }
 }
