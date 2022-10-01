@@ -1,4 +1,5 @@
 import Player from "./player.js";
+import Engine from "./engine.js";
 export default class World {
     /**
      * Game world state.
@@ -9,7 +10,8 @@ export default class World {
         this.server = Server;
         this.players = new Map();
         this.running = true;
-        this.updateLoop();
+
+        this.engine = new Engine(this);
     }
 
     // Managing player objects
@@ -33,14 +35,14 @@ export default class World {
         this.server.updatePlayerPositions(positionUpdate);
     }
 
-    updateLoop() {
-        if ((this.running = true)) {
-            setTimeout(() => { 
-                this.players.forEach((value, key) => {
-                    this.updatePlayerPositions(value, key);
-                });
-                this.updateLoop();
-            }, 50);
-        }
-    }
+    // updateLoop() {
+    //     if ((this.running = true)) {
+    //         setTimeout(() => { 
+    //             this.players.forEach((value, key) => {
+    //                 this.updatePlayerPositions(value, key);
+    //             });
+    //             this.updateLoop();
+    //         }, 1000/60);
+    //     }
+    // }
 }

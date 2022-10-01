@@ -89,7 +89,7 @@ class Server {
     this.World.createPlayer(id);
   }
 
-  updatePlayerPositions(update) {
+  updatePlayerPosition(update) {
     this.io.emit("position update", update);
   }
 
