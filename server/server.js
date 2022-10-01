@@ -65,7 +65,7 @@ class Server {
         this.io.room(channel.roomId).emit("chat message", data);
       });
       channel.on("state update", (data) => {
-        debug(`got ${data} from ${channel.id}`);
+        // debug(`got ${data} from ${channel.id}`);
         this.updatePlayerState(channel.id, data);
       });
       channel.on("create player", (data) => {

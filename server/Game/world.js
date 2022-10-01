@@ -31,18 +31,8 @@ export default class World {
 
     // Sending player position update for one id to the client 
     updatePlayerPositions(value, key) {
-        let positionUpdate = {"id": key, "x": value.state.xPosition, "y": value.state.yPosition}
+        let positionUpdate = {"id": key, "x": value.xPosition, "y": value.yPosition}
         this.server.updatePlayerPositions(positionUpdate);
     }
 
-    // updateLoop() {
-    //     if ((this.running = true)) {
-    //         setTimeout(() => { 
-    //             this.players.forEach((value, key) => {
-    //                 this.updatePlayerPositions(value, key);
-    //             });
-    //             this.updateLoop();
-    //         }, 1000/60);
-    //     }
-    // }
 }

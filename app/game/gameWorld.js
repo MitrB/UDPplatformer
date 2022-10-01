@@ -13,7 +13,7 @@ export default class World {
     let app = new Application({
       width: 1000,
       height: 1000,
-      backgroundColor: 0x1099b,
+      backgroundColor: 0x00000,
     });
 
     document.getElementById("game").appendChild(app.view);
@@ -22,14 +22,16 @@ export default class World {
   }
   drawCharacter(char) {
     console.log("drawing");
-    let update = char.positionUpdateBuffer[char.positionUpdateBuffer.length() - 1];
+    let lastElementIndex = char.positionUpdateBuffer.length - 1;
+    let update =
+      char.positionUpdateBuffer[lastElementIndex];
     if (update) {
       let x = update.x;
       let y = update.y;
 
       let graphics = char.graphics;
       graphics.clear();
-      graphics.lineStyle(5, 0xff0000);
+      graphics.lineStyle(5, char.color);
       graphics.drawRect(x, y, 10, 10);
       this.app.stage.addChild(graphics);
     }
@@ -44,7 +46,7 @@ export default class World {
     }
 
     player.positionUpdateBuffer.push(update);
-    while (player.positionUpdateBuffer.length() > 2) {
+    while (player.positionUpdateBuffer.length > 10) {
       player.positionUpdateBuffer.shift();
     }
   }
@@ -53,10 +55,9 @@ export default class World {
   drawLoop() {
     setInterval(() => {
       this.characters.forEach((value, key) => {
-        console.log(value);
         this.drawCharacter(value);
       });
-    }, 1000/60);
+    }, 1000 / 60);
   }
 }
 
@@ -64,5 +65,6 @@ class Player {
   constructor() {
     this.graphics = new PIXI.Graphics();
     this.positionUpdateBuffer = new Array();
+    this.color = "0x" + Math.floor(Math.random()*16777215).toString(16)
   }
 }
