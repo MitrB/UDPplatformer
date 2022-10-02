@@ -107,5 +107,4 @@ README.md.backup
 .tern-port
 
 # bundle.js
-bundle.js
-./client/bundle.js
+client

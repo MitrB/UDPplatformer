@@ -1,11 +1,17 @@
 import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
+import { Sprite } from "pixi.js";
+import sheetJSON from "../assets/spritesheet.json";
 
 export default class World {
   constructor() {
-    this.app = this.initPixiApp();
     this.characters = new Map(); // Map of all characters to be drawn on the screen.
+    this.spritesheet = new PIXI.Spritesheet(
+      PIXI.BaseTexture.from(sheetJSON.meta.image),
+      sheetJSON
+    );
 
+    this.app = this.initPixiApp();
     this.drawLoop();
   }
 
@@ -21,19 +27,22 @@ export default class World {
     return app;
   }
   drawCharacter(char) {
-    console.log("drawing");
     let lastElementIndex = char.positionUpdateBuffer.length - 1;
-    let update =
-      char.positionUpdateBuffer[lastElementIndex];
+    let update = char.positionUpdateBuffer[lastElementIndex];
     if (update) {
       let x = update.x;
       let y = update.y;
 
-      let graphics = char.graphics;
-      graphics.clear();
-      graphics.lineStyle(5, char.color);
-      graphics.drawRect(x, y, 10, 10);
-      this.app.stage.addChild(graphics);
+      if (char.idle) {
+        char.idle.position.x = x;
+        char.idle.position.y = y;
+      } else {
+        let graphics = char.graphics;
+        graphics.clear();
+        graphics.lineStyle(5, char.color);
+        graphics.drawRect(x, y, 10, 10);
+        this.app.stage.addChild(graphics);
+      }
     }
   }
 
@@ -41,7 +50,7 @@ export default class World {
     let id = update.id;
     let player = this.characters.get(id);
     if (!player) {
-      player = new Player();
+      player = new Player(this.spritesheet, this.app);
       this.characters.set(id, player);
     }
 
@@ -62,9 +71,13 @@ export default class World {
 }
 
 class Player {
-  constructor() {
+  constructor(sheet, app) {
     this.graphics = new PIXI.Graphics();
     this.positionUpdateBuffer = new Array();
-    this.color = "0x" + Math.floor(Math.random()*16777215).toString(16)
+    this.color = "0x" + Math.floor(Math.random() * 16777215).toString(16);
+    sheet.parse(() => {
+      this.idle = new PIXI.AnimatedSprite(sheet.animations.idle);
+    });
+    app.stage.addChild(this.idle);
   }
 }

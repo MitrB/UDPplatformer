@@ -35,7 +35,6 @@ export default class Client {
       });
 
       this.channel.on("position update", (update) => {
-        console.log("position update");
         this.world.updatePlayerPosition(update);
       });
 

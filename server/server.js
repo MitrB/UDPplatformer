@@ -75,6 +75,7 @@ class Server {
     });
     // make sure the client uses the same port
     // @geckos.io/client uses the port 9208 by default
+
     this.server.listen(this.port, () => {
       debug(`Listening on http://localhost:${this.port}`);
     });
