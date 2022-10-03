@@ -121,7 +121,7 @@ let level5FromMap5 = {
   spawnPos: { x: 5 * 32, y: 3 * 32 },
 };
 
-export let levels = {
+let levels = {
   level0: level0FromMap0,
   level1: level1FromMap1,
   level3: level3FromMap3,
@@ -129,10 +129,8 @@ export let levels = {
   level5: level5FromMap5,
 };
 
-// check that every level is correct, or else remove
-
 export function getRandomLevel() {
   let keys = Object.keys(levels);
-  //@ts-ignore
+  let randInt = (keys.length * Math.random()) << 0;
   return levels[keys[(keys.length * Math.random()) << 0]];
 }

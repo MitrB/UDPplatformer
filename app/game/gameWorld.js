@@ -5,30 +5,13 @@ import sheetJSON from "../assets/spritesheet.json";
 let _w = window.innerWidth * 0.99;
 let _h = window.innerHeight * 0.99;
 
-let map1 = `\
-11111111111111111111111111111\
-10000000000000000000000000001\
-1000000000S000000000000000001\
-10000000011100000000000000S01\
-10000000000000000000000000111\
-100000000S0000011000000000001\
-10000000011110000000000000111\
-100S0000000000000010000S00001\
-11111111111111111111111111111\
-`;
-
-let tilemap = {
-  width: 29,
-  height: 9,
-  map: map1,
-};
 
 export default class World {
   constructor() {
     this.characters = new Map(); // Map of all characters to be drawn on the screen.
 
     // get tilemap
-    this.tileMap = tilemap;
+    this.tileMap;
 
     // Textures and Sprites
     this.spritesheet = new PIXI.Spritesheet(
@@ -37,7 +20,6 @@ export default class World {
     );
 
     this.app = this.initPixiApp();
-    this.placeTiles(this.tileMap);
     this.drawLoop();
   }
 
@@ -112,7 +94,10 @@ export default class World {
     }, 1000 / 60);
   }
 
-  updateTileMap() {}
+  updateTileMap(tilemap) {
+    this.tileMap = tilemap;
+    this.placeTiles(tilemap);
+  }
 
   /*
     Function that places all the tiles for a given tilemap
@@ -122,7 +107,7 @@ export default class World {
       for (let j = 0; j < tilemap.width; j++) {
         switch (tilemap.map[i * tilemap.width + j]) {
           case "1":
-            this.drawTile(j*32, i*32, 1);
+            this.drawTile(j * 32, i * 32, 1);
             break;
 
           default:

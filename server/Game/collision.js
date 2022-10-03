@@ -1,5 +1,6 @@
 import { positionToTile } from "./tileMap/tileMap.js";
 
+    let SIZE = 32
 export class rectangle {
   constructor(x, y, l, w) {
     this.x = x;
@@ -46,13 +47,42 @@ export function tileUnderCharacter(character, map) {
     let pos = {x: character.xPosition, y: character.yPosition};
     let collPoints = [];
 
-    let SIZE = 32
 
     collPoints.push(pos);
-    collPoints.push({x: pos.x + SIZE-1, y: pos.y});
-    collPoints.push({x: pos.x, y: pos.y + SIZE-1});
-    collPoints.push({x: pos.x + SIZE-1, y: pos.y + SIZE-1});
+    collPoints.push({x: pos.x + SIZE, y: pos.y});
+    collPoints.push({x: pos.x, y: pos.y + SIZE});
+    collPoints.push({x: pos.x + SIZE, y: pos.y + SIZE});
 
+    for (let p of collPoints) {
+        if (positionToTile(p, SIZE, map) == "1") {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function tileLeft(character, map) {
+    let pos = {x: character.xPosition, y: character.yPosition};
+    let collPoints = [];
+
+    for (let i = 0; i < SIZE; i++) {
+        collPoints.push({x: pos.x, y: pos.y + i});
+    }
+    for (let p of collPoints) {
+        if (positionToTile(p, SIZE, map) == "1") {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function tileRight(character, map) {
+    let pos = {x: character.xPosition, y: character.yPosition};
+    let collPoints = [];
+
+    for (let i = 0; i < SIZE; i++) {
+        collPoints.push({x: pos.x + SIZE, y: pos.y + i});
+    }
     for (let p of collPoints) {
         if (positionToTile(p, SIZE, map) == "1") {
             return true;

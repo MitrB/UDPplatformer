@@ -3,6 +3,8 @@ import {
   characterCollidesWithWall,
   rectangle,
   rectangleCollision,
+  tileLeft,
+  tileRight,
   tileUnderCharacter,
 } from "./collision.js";
 let debug = util.debuglog("engine");
@@ -117,6 +119,16 @@ export default class Engine {
       } else {
         player.horizontalVelocity = 0;
       }
+      //TODO add collision
+      // if (tileLeft(player, this.world.tilemap)) {
+      //   player.xPosition = Math.floor(player.xPosition / SIZE) * SIZE + SIZE;
+      //   player.horizontalVelocity = 0;
+      // }
+      // if (tileRight(player, this.world.tilemap)) {
+      //   player.xPosition = Math.floor(player.xPosition / SIZE) * SIZE;
+      //   player.horizontalVelocity = 0;
+      // }
+
       debug("xPos: " + player.xPosition);
       debug("yPos: " + player.yPosition);
       debug("Vvel: " + player.verticalVelocity);

@@ -72,6 +72,13 @@ class Server {
         debug(`Create player request from ${channel.id}: ${data}`);
         this.createPlayer(channel.id, data);
       });
+
+      // TODO: unhack this
+      this.World.players.forEach((player, id) => {
+        this.updateCharacter({id: id});
+      });
+
+      this.updateTileMap(this.World.tilemap);
     });
     // make sure the client uses the same port
     // @geckos.io/client uses the port 9208 by default
@@ -103,6 +110,10 @@ class Server {
     if (!(this.World.players.get(id) == undefined)) {
       this.World.updatePlayerState(id, State);
     }
+  }
+
+  updateTileMap(update) {
+    this.sendReliableMessage("tilemap update", update);
   }
 
   sendReliableMessage(message, payload) {

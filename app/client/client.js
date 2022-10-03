@@ -44,6 +44,10 @@ export default class Client {
         this.world.updateCharacter(update);
       });
 
+      this.channel.on("tilemap update", (update) => {
+        this.world.updateTileMap(update);
+      })
+      
     });
   }
 

@@ -6,23 +6,6 @@ import util from "util";
 import { findSpawnCoordinates } from "./tileMap/tileMap.js";
 let debug = util.debuglog("world");
 
-let map1 = `\
-11111111111111111111111111111\
-10000000000000000000000000001\
-1000000000S000000000000000001\
-10000000011100000000000000S01\
-10000000000000000000000000111\
-100000000S0000011000000000001\
-10000000011110000000000000111\
-100S0000000000000010000S00001\
-11111111111111111111111111111\
-`;
-
-let tilemap = {
-  width: 29,
-  height: 9,
-  map: map1,
-};
 
 export default class World {
   /**
@@ -35,8 +18,8 @@ export default class World {
     this.players = new Map();
     this.running = true;
 
-    this.tilemap = tilemap;
-    this.spawnPoints = findSpawnCoordinates(tilemap);
+    this.tilemap = getRandomLevel();
+    this.spawnPoints = findSpawnCoordinates(this.tilemap);
     this.engine = new Engine(this);
   }
 
