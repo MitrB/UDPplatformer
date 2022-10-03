@@ -1,38 +1,44 @@
 import Player from "./player.js";
 import Engine from "./engine.js";
+import { getRandomLevel } from "./tileMap/levels.js";
+
+import util from "util";
+let debug = util.debuglog("world");
+
 export default class World {
-    /**
-     * Game world state.
-     * Player management.
-     * @param {Server} Server For communicating and receiving position/state updates.
-     */
-    constructor(Server) {
-        this.server = Server;
-        this.players = new Map();
-        this.running = true;
+  /**
+   * Game world state.
+   * Player management.
+   * @param {Server} Server For communicating and receiving position/state updates.
+   */
+  constructor(Server) {
+    this.server = Server;
+    this.players = new Map();
+    this.running = true;
 
-        this.engine = new Engine(this);
-    }
+    this.tilemap = getRandomLevel();
+    this.engine = new Engine(this);
+  }
 
-    // Managing player objects
-    // TODO: Notify the client that a player has been created in the world. Send ID and starting position
-    createPlayer(id) {
-        let player = new Player(id);
-        this.players.set(id, player);
-    }
+  // Managing player objects
+  // TODO: Notify the client that a player has been created in the world. Send ID and starting position
+  createPlayer(id) {
+    debug(`Creating character with id: ${id}`);
+    let player = new Player(id);
+    this.players.set(id, player);
+  }
 
-    deletePlayer(id) {
-        this.players.delete(id);
-    }
+  deletePlayer(id) {
+    this.players.delete(id);
+  }
 
-    updatePlayerState(id, State) {
-        this.players.get(id).updateState(State);
-    }
+  updatePlayerState(id, State) {
+    this.players.get(id).updateState(State);
+  }
 
-    // Sending player position update for one id to the client 
-    updatePlayerPositions(value, key) {
-        let positionUpdate = {"id": key, "x": value.xPosition, "y": value.yPosition}
-        this.server.updatePlayerPositions(positionUpdate);
-    }
-
+  // Sending player position update for one id to the client
+  updatePlayerPositions(value, key) {
+    let positionUpdate = { id: key, x: value.xPosition, y: value.yPosition };
+    this.server.updatePlayerPositions(positionUpdate);
+  }
 }

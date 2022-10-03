@@ -1,11 +1,12 @@
 import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
-import { Sprite } from "pixi.js";
 import sheetJSON from "../assets/spritesheet.json";
 
 export default class World {
   constructor() {
     this.characters = new Map(); // Map of all characters to be drawn on the screen.
+
+    // Textures and Sprites
     this.spritesheet = new PIXI.Spritesheet(
       PIXI.BaseTexture.from(sheetJSON.meta.image),
       sheetJSON
@@ -13,6 +14,17 @@ export default class World {
 
     this.app = this.initPixiApp();
     this.drawLoop();
+  }
+
+  updateCharacter(properties) {
+    let character = this.characters.get(properties.id);
+
+    if (character) {
+      character.updateProperties(properties);
+    }
+    else{
+      this.characters.set(properties.id, new Character(properties, this.spritesheet, this.app))
+    }
   }
 
   initPixiApp() {
@@ -26,6 +38,7 @@ export default class World {
 
     return app;
   }
+
   drawCharacter(char) {
     let lastElementIndex = char.positionUpdateBuffer.length - 1;
     let update = char.positionUpdateBuffer[lastElementIndex];
@@ -48,15 +61,15 @@ export default class World {
 
   updatePlayerPosition(update) {
     let id = update.id;
-    let player = this.characters.get(id);
-    if (!player) {
-      player = new Player(this.spritesheet, this.app);
-      this.characters.set(id, player);
+    let character = this.characters.get(id);
+    if (!character) {
+      console.log("ERROR: no character to update position for.");
+      return;
     }
 
-    player.positionUpdateBuffer.push(update);
-    while (player.positionUpdateBuffer.length > 10) {
-      player.positionUpdateBuffer.shift();
+    character.positionUpdateBuffer.push(update);
+    while (character.positionUpdateBuffer.length > 10) {
+      character.positionUpdateBuffer.shift();
     }
   }
 
@@ -70,14 +83,20 @@ export default class World {
   }
 }
 
-class Player {
-  constructor(sheet, app) {
+class Character {
+  constructor(properties, sheet, app) {
+    this.properties = properties;
     this.graphics = new PIXI.Graphics();
     this.positionUpdateBuffer = new Array();
     this.color = "0x" + Math.floor(Math.random() * 16777215).toString(16);
+
     sheet.parse(() => {
       this.idle = new PIXI.AnimatedSprite(sheet.animations.idle);
     });
     app.stage.addChild(this.idle);
+  }
+
+  updateProperties(properties) {
+
   }
 }

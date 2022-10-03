@@ -3,8 +3,10 @@ export default class Player {
      * Physical player object
      * Acts on the world and the world acts on it.
      * @param {number} id  unique identifier
+     * @param {number} length length of player model
+     * @param {number} width width of player model
      */
-    constructor(id){
+    constructor(id, length, width){
         this.id = id;
         this.horizontalAcceleration = 1500;
         this.maxHorizontalVelocity = 1000;
@@ -13,12 +15,16 @@ export default class Player {
         this.xPosition = 0;
         this.yPosition = 0;
 
+        this.length = length;
+        this.width = width;
+
         this.left = false;
         this.right = false;
         this.down = false;
         this.up = false;
 
         this.jumping = false;
+
     }
 
     setPosition(x, y){

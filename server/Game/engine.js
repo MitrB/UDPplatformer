@@ -1,15 +1,17 @@
 import util from "util";
 let debug = util.debuglog("engine");
+
 export default class Engine {
   constructor(World) {
     this.world = World;
     this.gravityFactor = 1000;
     this.TICK = 1000 / 60;
     this.tickCOUNT = 0;
-    this.gameLoop();
 
     this.elapsedTime = 0;
     this.previousTime = 0;
+
+    this.gameLoop();
   }
 
   async gameLoop() {
@@ -20,6 +22,8 @@ export default class Engine {
     while (this.elapsedTime >= this.TICK) {
       this.elapsedTime -= this.TICK;
       this.physicsUpdate(this.TICK);
+      
+      //check for collisions
     }
 
     // TODO: proper snapshots
@@ -46,6 +50,7 @@ export default class Engine {
     let players = this.world.players;
 
     players.forEach((player, key) => {
+      //check for state
       if (player.yPosition >= 900 - 10) {
         player.yPosition = 900 - 10;
         player.verticalVelocity = 0;

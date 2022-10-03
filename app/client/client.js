@@ -12,14 +12,16 @@ export default class Client {
   constructor() {
     this.app = new App(this);
     this.world = new World(); // Create world for graphics
+    this.channel;
 
     this.connect().then(() => {
       console.log("trying to connect");
       this.configureChannel();
+      this.createPlayer();
     });
   }
 
-  async connect(){
+  async connect() {
     this.channel = geckos({ port: 3000, iceServers: geckos.iceServers }); // default port is 9208
   }
 
@@ -38,7 +40,10 @@ export default class Client {
         this.world.updatePlayerPosition(update);
       });
 
-      this.id = this.channel.id
+      this.channel.on("character update", (update) => {
+        this.world.updateCharacter(update);
+      });
+
     });
   }
 
@@ -46,16 +51,18 @@ export default class Client {
     this.sendUnreliableMessage("state update", State);
   }
 
-  askForPlayerCreation() {
-    this.sendReliableMessage("create player", "");
+  createPlayer() {
+    let payload = {
+      model: undefined,
+    };
+    this.sendReliableMessage("create player", payload);
   }
 
-
-  sendReliableMessage(messageType, payload){
-    this.channel.emit(messageType, payload, {reliable: true});
+  sendReliableMessage(messageType, payload) {
+    this.channel.emit(messageType, payload, { reliable: true });
   }
 
-  sendUnreliableMessage(messageType, payload){
+  sendUnreliableMessage(messageType, payload) {
     this.channel.emit(messageType, payload);
   }
 }

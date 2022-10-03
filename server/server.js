@@ -65,12 +65,12 @@ class Server {
         this.io.room(channel.roomId).emit("chat message", data);
       });
       channel.on("state update", (data) => {
-        // debug(`got ${data} from ${channel.id}`);
+        debug(`got ${data} from ${channel.id}`);
         this.updatePlayerState(channel.id, data);
       });
       channel.on("create player", (data) => {
-        // create player
-        this.createPlayer(channel.id);
+        debug(`Create player request from ${channel.id}: ${data}`);
+        this.createPlayer(channel.id, data);
       });
     });
     // make sure the client uses the same port
@@ -86,19 +86,27 @@ class Server {
     this.World = new World(this);
   }
 
-  createPlayer(id) {
+  createPlayer(id, payload) {
     this.World.createPlayer(id);
+    this.updateCharacter({id: id});
   }
 
   updatePlayerPosition(update) {
     this.io.emit("position update", update);
   }
 
+  updateCharacter(update) {
+    this.sendReliableMessage("character update", update);
+  }
+
   updatePlayerState(id, State) {
-    if (this.World.players.get(id) == undefined) {
-      this.World.createPlayer(id);
+    if (!(this.World.players.get(id) == undefined)) {
+      this.World.updatePlayerState(id, State);
     }
-    this.World.updatePlayerState(id, State);
+  }
+
+  sendReliableMessage(message, payload) {
+    this.io.emit(message, payload, {reliable: true});
   }
 
   // Functions for test purposes.

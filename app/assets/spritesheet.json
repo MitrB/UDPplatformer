@@ -5,7 +5,8 @@
 		"scale": "1"
 	},
 	"animations": {
-		"idle": ["basicHuman-0.png"]
+		"idle": ["basicHuman-0.png"],
+		"moving": ["basicHuman-1.png", "basicHuman-2.png","basicHuman-3.png", "basicHuman-4.png", "basicHuman-5.png", "basicHuman-6.png", "basicHuman-7.png"]
 	},
 	"frames": {
 		"basicHuman-0.png":
