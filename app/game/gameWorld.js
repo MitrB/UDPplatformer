@@ -2,9 +2,33 @@ import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
 import sheetJSON from "../assets/spritesheet.json";
 
+let _w = window.innerWidth * 0.99;
+let _h = window.innerHeight * 0.99;
+
+let map1 = `\
+11111111111111111111111111111\
+10000000000000000000000000001\
+1000000000S000000000000000001\
+10000000011100000000000000S01\
+10000000000000000000000000111\
+100000000S0000011000000000001\
+10000000011110000000000000111\
+100S0000000000000010000S00001\
+11111111111111111111111111111\
+`;
+
+let tilemap = {
+  width: 29,
+  height: 9,
+  map: map1,
+};
+
 export default class World {
   constructor() {
     this.characters = new Map(); // Map of all characters to be drawn on the screen.
+
+    // get tilemap
+    this.tileMap = tilemap;
 
     // Textures and Sprites
     this.spritesheet = new PIXI.Spritesheet(
@@ -13,6 +37,7 @@ export default class World {
     );
 
     this.app = this.initPixiApp();
+    this.placeTiles(this.tileMap);
     this.drawLoop();
   }
 
@@ -21,16 +46,20 @@ export default class World {
 
     if (character) {
       character.updateProperties(properties);
-    }
-    else{
-      this.characters.set(properties.id, new Character(properties, this.spritesheet, this.app))
+    } else {
+      this.characters.set(
+        properties.id,
+        new Character(properties, this.spritesheet, this.app)
+      );
     }
   }
 
   initPixiApp() {
     let app = new Application({
-      width: 1000,
-      height: 1000,
+      width: _w,
+      height: _h,
+      resolution: window.devicePixelRatio,
+      autoDensity: true,
       backgroundColor: 0x00000,
     });
 
@@ -52,8 +81,9 @@ export default class World {
       } else {
         let graphics = char.graphics;
         graphics.clear();
-        graphics.lineStyle(5, char.color);
-        graphics.drawRect(x, y, 10, 10);
+        // graphics.lineStyle(5, char.color);
+        graphics.beginFill(char.color);
+        graphics.drawRect(x, y, 32, 32);
         this.app.stage.addChild(graphics);
       }
     }
@@ -81,6 +111,33 @@ export default class World {
       });
     }, 1000 / 60);
   }
+
+  updateTileMap() {}
+
+  /*
+    Function that places all the tiles for a given tilemap
+    */
+  placeTiles(tilemap) {
+    for (let i = 0; i < tilemap.height; i++) {
+      for (let j = 0; j < tilemap.width; j++) {
+        switch (tilemap.map[i * tilemap.width + j]) {
+          case "1":
+            this.drawTile(j*32, i*32, 1);
+            break;
+
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  drawTile(x, y, tile) {
+    let graphics = new PIXI.Graphics();
+    graphics.lineStyle(1, "0x341534");
+    graphics.drawRect(x, y, 32, 32);
+    this.app.stage.addChild(graphics);
+  }
 }
 
 class Character {
@@ -90,13 +147,11 @@ class Character {
     this.positionUpdateBuffer = new Array();
     this.color = "0x" + Math.floor(Math.random() * 16777215).toString(16);
 
-    sheet.parse(() => {
-      this.idle = new PIXI.AnimatedSprite(sheet.animations.idle);
-    });
-    app.stage.addChild(this.idle);
+    // sheet.parse(() => {
+    //   this.idle = new PIXI.AnimatedSprite(sheet.animations.idle);
+    // });
+    // app.stage.addChild(this.idle);
   }
 
-  updateProperties(properties) {
-
-  }
+  updateProperties(properties) {}
 }

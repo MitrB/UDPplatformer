@@ -6,14 +6,14 @@ export default class Player {
      * @param {number} length length of player model
      * @param {number} width width of player model
      */
-    constructor(id, length, width){
+    constructor(id, length, width, x, y){
         this.id = id;
-        this.horizontalAcceleration = 1500;
-        this.maxHorizontalVelocity = 1000;
+        this.horizontalAcceleration = 750;
+        this.maxHorizontalVelocity = 500;
         this.horizontalVelocity = 0;
         this.verticalVelocity = 0;
-        this.xPosition = 0;
-        this.yPosition = 0;
+        this.xPosition = x;
+        this.yPosition = y;
 
         this.length = length;
         this.width = width;

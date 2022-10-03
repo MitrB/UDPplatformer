@@ -1,4 +1,10 @@
 import util from "util";
+import {
+  characterCollidesWithWall,
+  rectangle,
+  rectangleCollision,
+  tileUnderCharacter,
+} from "./collision.js";
 let debug = util.debuglog("engine");
 
 export default class Engine {
@@ -22,7 +28,7 @@ export default class Engine {
     while (this.elapsedTime >= this.TICK) {
       this.elapsedTime -= this.TICK;
       this.physicsUpdate(this.TICK);
-      
+
       //check for collisions
     }
 
@@ -51,15 +57,36 @@ export default class Engine {
 
     players.forEach((player, key) => {
       //check for state
-      if (player.yPosition >= 900 - 10) {
-        player.yPosition = 900 - 10;
-        player.verticalVelocity = 0;
-        if (player.up == true) {
-          player.verticalVelocity = -800;
+      let playerHitBox = new rectangle(
+        player.xPosition,
+        player.yPosition,
+        32,
+        32
+      );
 
-          player.yPosition -= 1;
+      if (player.up == true) {
+        player.verticalVelocity = -400;
+
+        player.yPosition -= 1;
+      }
+
+      let SIZE = 32;
+
+      if (characterCollidesWithWall(player, this.world.tilemap)) {
+        debug(`collision`);
+
+        // player.horizontalVelocity = 0;
+        player.verticalVelocity = 0;
+        let relativeCoord = player.yPosition % SIZE;
+        if (relativeCoord > SIZE / 2) {
+          player.yPosition = Math.floor(player.yPosition / SIZE) * SIZE + SIZE;
+        } else {
+          player.yPosition = Math.floor(player.yPosition / SIZE) * SIZE;
         }
-      } else {
+      }
+
+      if (!tileUnderCharacter(player, this.world.tilemap)) {
+        debug(`falling`);
         // speed = speed_c + a * time
         // movement = position + time * speed + time * a * time^2 / 2
         player.verticalVelocity =
@@ -90,6 +117,7 @@ export default class Engine {
       } else {
         player.horizontalVelocity = 0;
       }
+      debug("xPos: " + player.xPosition);
       debug("yPos: " + player.yPosition);
       debug("Vvel: " + player.verticalVelocity);
       debug("Hvel: " + player.horizontalVelocity);
