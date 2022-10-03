@@ -5,7 +5,6 @@ import sheetJSON from "../assets/spritesheet.json";
 let _w = window.innerWidth * 0.99;
 let _h = window.innerHeight * 0.99;
 
-
 export default class World {
   constructor() {
     this.characters = new Map(); // Map of all characters to be drawn on the screen.

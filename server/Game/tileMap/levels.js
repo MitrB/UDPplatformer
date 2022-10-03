@@ -87,38 +87,32 @@ let map5 = `\
 let level0FromMap0 = {
   width: 5,
   height: 6,
-  map: map0,
-  spawnPos: { x: 3 * 32, y: 3 * 32 },
+  map: map0
 };
 let level1FromMap1 = {
   width: 29,
   height: 9,
-  map: map1,
-  spawnPos: { x: 3 * 32, y: 3 * 32 },
+  map: map1
 };
 let level2FromMap2 = {
   width: 29,
   height: 9,
-  map: map2,
-  spawnPos: { x: 3 * 32, y: 3 * 32 },
+  map: map2
 };
 let level3FromMap3 = {
   width: 58,
   height: 12,
-  map: map3,
-  spawnPos: { x: 5 * 32, y: 3 * 32 },
+  map: map3
 };
 let level4FromMap4 = {
   width: 58,
   height: 12,
-  map: map4,
-  spawnPos: { x: 5 * 32, y: 3 * 32 },
+  map: map4
 };
 let level5FromMap5 = {
   width: 58,
   height: 22,
-  map: map5,
-  spawnPos: { x: 5 * 32, y: 3 * 32 },
+  map: map5
 };
 
 let levels = {
