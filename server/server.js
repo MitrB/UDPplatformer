@@ -1,5 +1,7 @@
 import geckos from "@geckos.io/server";
-import http from "http";
+// import http from "http";
+import https from "https";
+import fs from "fs";
 import express from "express";
 import path from "path";
 import { dirname } from "path";
@@ -36,9 +38,15 @@ class Server {
     debug("Initializing Server");
     this.app = express();
     // TODO: convert to https server.
-    this.server = http.createServer(this.app);
+    this.server = https.createServer(
+      {
+        key: fs.readFileSync("./keys/key.pem"),
+        cert: fs.readFileSync("./keys/cert.pem"),
+      },
+      this.app
+    );
     // this.io = geckos();
-    this.io = geckos({iceServers: iceServers});
+    this.io = geckos({ iceServers: iceServers });
     this.port = 3000;
 
     this.app.use("/", express.static(path.join(__dirname, "../client")));
@@ -75,7 +83,7 @@ class Server {
 
       // TODO: unhack this
       this.World.players.forEach((player, id) => {
-        this.updateCharacter({id: id});
+        this.updateCharacter({ id: id });
       });
 
       this.updateTileMap(this.World.tilemap);
@@ -95,7 +103,7 @@ class Server {
 
   createPlayer(id, payload) {
     this.World.createPlayer(id);
-    this.updateCharacter({id: id});
+    this.updateCharacter({ id: id });
   }
 
   updatePlayerPosition(update) {
@@ -117,7 +125,7 @@ class Server {
   }
 
   sendReliableMessage(message, payload) {
-    this.io.emit(message, payload, {reliable: true});
+    this.io.emit(message, payload, { reliable: true });
   }
 
   // Functions for test purposes.

@@ -108,3 +108,10 @@ README.md.backup
 
 # bundle.js
 client
+
+#keys
+key.pem
+cert.pem
+csr.pem
+./keys/*.pem
+*.pem
