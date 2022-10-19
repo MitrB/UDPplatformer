@@ -8,4 +8,4 @@ To start the server:
 - `npm run webpack`
 - `npm start`
 
-This starts a server on `http://localhost:3000`.
+This starts a server on `https://localhost:3000`.
